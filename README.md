@@ -1,0 +1,1 @@
+This is a Chrome extension which highlight words in a website based on your predefined word list
