@@ -1,3 +1,4 @@
+console.log("start highlighting")
 wordset = wordset.split(" ")
 var len = wordset.length
 var i = 0

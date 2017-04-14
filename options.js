@@ -1,4 +1,8 @@
 // Saves options to chrome.storage
+// The following clear function is for debugging only
+//chrome.storage.sync.clear()
+piece_size = 2048
+no_piece = 50
 function save_options() {
   wordsets = []
   for(var i=0; i< counter; i++){
@@ -7,61 +11,72 @@ function save_options() {
     entry = {"name": name, "wordset": wordset}
     wordsets.push(entry)
   }
-  
-  chrome.storage.sync.set({
-    wordsets: wordsets,
-  }, function() {
-    // Update status to let user know options were saved.
-    var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
-    setTimeout(function() {
+  // chopping data to smaller pieces to satisfy Chrome's storage policy
+  wordsets = JSON.stringify(wordsets)
+  len = wordsets.length
+
+  for(var i =0; i< no_piece; i++){
+    if(i*piece_size>=len){
+      piece = ""
+    }
+    if(i*piece_size + piece_size >len){
+      piece = wordsets.slice(i*piece_size, len)
+    }
+    piece = wordsets.slice(i*piece_size, i*piece_size+ piece_size)
+    var data = {}
+    data[i] = piece
+    chrome.storage.sync.set(data)
+  }
+  var status = document.getElementById('status');
+  status.textContent = 'Options saved.';
+  setTimeout(function() {
       status.textContent = '';
     }, 750);
-  });
+  
 }
 
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
+
 function restore_options() {
-  // Use default value color = 'red' and likesColor = true.
-  chrome.storage.sync.get({
-    favoriteColor: 'red',
-    likesColor: true,
-	wordsets: []
-  }, function(items) {
-    console.log(items)
-    counter = items.wordsets.length
-    for(var i=0; i< counter; i++){
-      console.log(i)
-      var div = document.createElement('div')
-      var name = document.createElement("input")
-      name.setAttribute("id", "name-"+i)
-      name.setAttribute("style", "width: 100px; vertical-align: top;")
-      name.setAttribute("value", items.wordsets[i]["name"])
-      
-      var wordset = document.createElement("textarea")
-      wordset.setAttribute("id", "wordset-"+i)
-      wordset.setAttribute("cols", "80")
-      wordset.setAttribute("rows", "15")
-      wordset.textContent = items.wordsets[i]["wordset"]
+  chrome.storage.sync.get(
+	  null
+  , function(items) {
+    if(Object.keys(items).length === 0 && items.constructor === Object){
+      counter = 0;
+    }else{
+      data_string = ""
+      for(var i = 0; i<no_piece; i++){
+        data_string = data_string + items[i]
+      }
+      wordsets = JSON.parse(data_string)
+      counter = wordsets.length
+      for(var i=0; i< counter; i++){
+        var div = document.createElement('div')
+        var name = document.createElement("input")
+        name.setAttribute("id", "name-"+i)
+        name.setAttribute("style", "width: no_piecepx; vertical-align: top;")
+        name.setAttribute("value", wordsets[i]["name"])
+        
+        var wordset = document.createElement("textarea")
+        wordset.setAttribute("id", "wordset-"+i)
+        wordset.setAttribute("cols", "80")
+        wordset.setAttribute("rows", "15")
+        wordset.textContent = wordsets[i]["wordset"]
 
-      div.setAttribute("id", "0")
-      div.appendChild(name)
-      div.appendChild(wordset)
-      var content = document.getElementById('content')
-      content.appendChild(div);
+        div.setAttribute("id", "0")
+        div.appendChild(name)
+        div.appendChild(wordset)
+        var content = document.getElementById('content')
+        content.appendChild(div);
+      }
     }
-    document.getElementById('color').value = items.favoriteColor;
-    document.getElementById('like').checked = items.likesColor;
-	
-  });
-}
+  })
+};
+
 function add(){
-	console.log("call add")
 	var div = document.createElement('div')
 	var name = document.createElement("input")
 	name.setAttribute("id", "name-"+counter)
-	name.setAttribute("style", "width: 100px; vertical-align: top;")
+	name.setAttribute("style", "width: no_piecepx; vertical-align: top;")
 	name.setAttribute("value", "Name")
 	
 	var wordset = document.createElement("textarea")
