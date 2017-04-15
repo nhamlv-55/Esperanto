@@ -8,6 +8,8 @@ function save_options() {
   for(var i=0; i< counter; i++){
     name = document.getElementById("name-"+i).value
     wordset = document.getElementById("wordset-"+i).value
+    wordset = wordset.replace(/\n/g, " ")
+    wordset = wordset.replace(/","/g, " ")
     entry = {"name": name, "wordset": wordset}
     wordsets.push(entry)
   }

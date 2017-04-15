@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	    // onClick's logic below:
 	    highlight.addEventListener('click', function() {
 	    	index = document.getElementById("wordset-selector").value
+		chrome.storage.sync.set({
+			last_id: index
+		})
 	    	wordset = wordsets[index]["wordset"]
 
 	    	console.log(index)
@@ -34,6 +37,7 @@ function restore_options() {
   chrome.storage.sync.get(
 	  null
   , function(items) {
+    console.log(items)
     if(Object.keys(items).length === 0 && items.constructor === Object){
       counter = 0;
     }else{
@@ -46,14 +50,14 @@ function restore_options() {
 
       var select = document.createElement("select")
       select.setAttribute("id", "wordset-selector")
-
+      index = items["last_id"]
       for(var i=0; i< counter; i++){
       	var name = document.createElement("option")
       	name.setAttribute("value", i)
       	name.textContent = wordsets[i]["name"]
       	select.appendChild(name)
       }
-
+      select.value = index
       var content = document.getElementById('content')
       content.appendChild(select);
     }
