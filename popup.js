@@ -25,8 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	        	}
 	        );
 	    });
+	    var options = document.getElementById('go-to-options');
+	    options.addEventListener('click', function(){
+	    	chrome.runtime.openOptionsPage();
+	    })
 	});
-
 function restore_options() {
   chrome.storage.sync.get(
 	  null

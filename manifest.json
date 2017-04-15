@@ -2,9 +2,9 @@
 "manifest_version": 2,
     "name": "Esperanto",
     "description": "A plugin for learning languages",
-    "version": "1.0",
+    "version": "1.1",
     "browser_action": {
-        "default_icon": "16-square.png",
+        "default_icon": "128-square.png",
         "default_popup": "popup.html"
     },
     "icons": { "16": "16-square.png",

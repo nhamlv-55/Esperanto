@@ -53,12 +53,13 @@ function restore_options() {
         var div = document.createElement('div')
         var name = document.createElement("input")
         name.setAttribute("id", "name-"+i)
-        name.setAttribute("style", "width: no_piecepx; vertical-align: top;")
+        name.setAttribute("style", "width: 100px; vertical-align: top;")
         name.setAttribute("value", wordsets[i]["name"])
         
         var wordset = document.createElement("textarea")
         wordset.setAttribute("id", "wordset-"+i)
         wordset.setAttribute("cols", "80")
+        wordset.setAttribute("style", "margin-left: 4px;")
         wordset.setAttribute("rows", "15")
         wordset.textContent = wordsets[i]["wordset"]
 
@@ -76,12 +77,13 @@ function add(){
 	var div = document.createElement('div')
 	var name = document.createElement("input")
 	name.setAttribute("id", "name-"+counter)
-	name.setAttribute("style", "width: no_piecepx; vertical-align: top;")
+	name.setAttribute("style", "width: 100px; vertical-align: top;")
 	name.setAttribute("value", "Name")
 	
 	var wordset = document.createElement("textarea")
 	wordset.setAttribute("id", "wordset-"+counter)
 	wordset.setAttribute("cols", "80")
+  wordset.setAttribute("style", "margin-left: 4px;")
 	wordset.setAttribute("rows", "15")
 	wordset.textContent = "Words...."
 
