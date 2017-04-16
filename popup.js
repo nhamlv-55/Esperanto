@@ -19,14 +19,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	    	console.log(index)
 	    	console.log("called highlight")
-	        chrome.tabs.executeScript(null, {
-	        	code: 'var wordset = '+'"'+wordset+'"'},
-	        	function () {
-	        		console.log(wordset)
+		chrome.tabs.executeScript({ file: "mark.min.js" }, function(){
+			chrome.tabs.executeScript(null, {
+				code: 'var wordset = '+'"'+wordset+'"'},
+				function () {
+					console.log(wordset)
 
-	        		chrome.tabs.executeScript(null, {file: 'highlight.js'});
-	        	}
-	        );
+					chrome.tabs.executeScript(null, {file: 'highlight.js'});
+				}
+			);
+		})
+	        
 	    });
 	    var options = document.getElementById('go-to-options');
 	    options.addEventListener('click', function(){
@@ -63,31 +66,6 @@ function restore_options() {
     }
   })
 };
-
-
-
-// function restore_options() {
-//   chrome.storage.sync.get({
-// 	wordsets: []
-//   }, function(items) {
-//     console.log(items)
-//     data = items
-//     counter = items.wordsets.length
-//     var select = document.createElement("select")
-//     select.setAttribute("id", "wordset-selector")
-//     for(var i=0; i< counter; i++){
-//       console.log(i)
-//       var name = document.createElement("option")
-//       name.setAttribute("value", i)
-//       name.textContent = items.wordsets[i]["name"]
-//       select.appendChild(name)
-//     }
-    
-//     var content = document.getElementById('content')
-//     content.appendChild(select);
-	
-//   });
-// }
 
 
 document.addEventListener('DOMContentLoaded', restore_options);
